@@ -1,4 +1,4 @@
-# BBC News Text Mining — Classification & Clustering
+# BBC News Text Mining and Processing
 
 🌐 **[English](#english) | [Italiano](#italiano)**
 
@@ -45,7 +45,7 @@ Two representation families are compared throughout: **sparse, frequency-based**
 
 ## Dataset
 
-- **Source:** [BBC Full Text Document Classification — Kaggle](https://www.kaggle.com/datasets/shivamkushwaha/bbc-full-text-document-classification)
+- **Source:** [BBC Full Text Document Classification: Kaggle](https://www.kaggle.com/datasets/shivamkushwaha/bbc-full-text-document-classification)
 - **Size:** 2,232 articles
 - **Categories (5):** Business, Entertainment, Politics, Sport, Tech
 - **Class balance:** reasonably balanced across categories, suitable for both classification and clustering
@@ -77,15 +77,15 @@ Each notebook consumes the outputs produced by the previous one, so they must be
 
 ## Pipeline
 
-1. **Data loading & EDA** – load the raw dataset, inspect class distribution and text length.
-2. **Preprocessing** – two dedicated pipelines depending on the downstream representation:
+1. **Data loading & EDA**: load the raw dataset, inspect class distribution and text length.
+2. **Preprocessing**: two dedicated pipelines depending on the downstream representation:
    - **Strong preprocessing** (for BoW/TF-IDF): lowercasing, punctuation/number removal, tokenization, stopword removal, lemmatization (spaCy).
-   - **Light preprocessing** (for contextual embeddings): newline removal and whitespace cleaning only — no lowercasing, stopword removal, or lemmatization, to preserve the semantic/contextual information that pretrained language models rely on.
+   - **Light preprocessing** (for contextual embeddings): newline removal and whitespace cleaning only --> no lowercasing, stopword removal, or lemmatization, to preserve the semantic/contextual information that pretrained language models rely on.
 3. **Text representation**:
-   - **TF-IDF** — sparse representation, shape `(2232, 6985)`, computed both on the train/test split (classification) and on the full corpus (clustering).
-   - **Sentence embeddings** — dense representation from `all-MiniLM-L6-v2` (Sentence Transformers), shape `(2232, 384)`.
-4. **Classification** — Logistic Regression, SVM (RBF kernel), and Random Forest, each trained on both TF-IDF and embeddings.
-5. **Clustering** — KMeans and Agglomerative Clustering on both representations, with the number of clusters selected via silhouette analysis (k = 2…20).
+   - **TF-IDF**: sparse representation, shape `(2232, 6985)`, computed both on the train/test split (classification) and on the full corpus (clustering).
+   - **Sentence embeddings**: dense representation from `all-MiniLM-L6-v2` (Sentence Transformers), shape `(2232, 384)`.
+4. **Classification**: Logistic Regression, SVM (RBF kernel), and Random Forest, each trained on both TF-IDF and embeddings.
+5. **Clustering**: KMeans and Agglomerative Clustering on both representations, with the number of clusters selected via silhouette analysis (k = 2…20).
 
 ## Notebooks
 
@@ -107,7 +107,7 @@ Loads `df_bbc.pkl` (produced by notebook 01) and builds **two parallel cleaned v
   6. run the text through spaCy and keep only **alphabetic, non-stopword tokens**, replacing each with its **lemma** (`token.lemma_`)
   7. join the resulting tokens back into a string
 
-- **`preprocess_for_bert(text)`** — light/minimal normalization for embeddings, column `clean_text_bert`:
+- **`preprocess_for_bert(text)`**: light/minimal normalization for embeddings, column `clean_text_bert`:
   1. remove newlines
   2. collapse extra whitespace
   3. **no** lowercasing, lemmatization, or stopword removal — the rationale (documented in the notebook) is that aggressive normalization would alter the input distribution the pretrained transformer was trained on, potentially degrading embedding quality.
@@ -190,7 +190,7 @@ TF-IDF clustering favors a much larger number of clusters (k = 16), reflecting f
 - Text representation choice has a major impact on both tasks, and **no single representation is universally optimal**.
 - **Sparse (TF-IDF) representations excel in supervised classification**, thanks to the distinctive vocabulary of each news category.
 - **Dense embeddings excel in unsupervised clustering**, better capturing high-level semantic similarity between documents.
-- The best representation is task-dependent — a trade-off between interpretability (TF-IDF) and semantic richness (embeddings).
+- The best representation is task-dependent, a trade-off between interpretability (TF-IDF) and semantic richness (embeddings).
 
 ## Requirements
 
@@ -271,7 +271,7 @@ Vengono confrontate due famiglie di rappresentazioni: quelle **sparse, basate su
 
 ## Dataset
 
-- **Fonte:** [BBC Full Text Document Classification — Kaggle](https://www.kaggle.com/datasets/shivamkushwaha/bbc-full-text-document-classification)
+- **Fonte:** [BBC Full Text Document Classification: Kaggle](https://www.kaggle.com/datasets/shivamkushwaha/bbc-full-text-document-classification)
 - **Dimensione:** 2.232 articoli
 - **Categorie (5):** Business, Entertainment, Politics, Sport, Tech
 - **Bilanciamento delle classi:** ragionevolmente bilanciato tra le categorie, adatto sia alla classificazione che al clustering
@@ -303,15 +303,15 @@ Ogni notebook utilizza gli output prodotti dal precedente, quindi vanno eseguiti
 
 ## Pipeline
 
-1. **Caricamento dati & EDA** – caricamento del dataset grezzo, analisi della distribuzione delle classi e della lunghezza dei testi.
-2. **Preprocessing** – due pipeline dedicate a seconda della rappresentazione a valle:
+1. **Caricamento dati & EDA**: caricamento del dataset grezzo, analisi della distribuzione delle classi e della lunghezza dei testi.
+2. **Preprocessing**: due pipeline dedicate a seconda della rappresentazione a valle:
    - **Preprocessing forte** (per BoW/TF-IDF): lowercasing, rimozione di punteggiatura/numeri, tokenizzazione, rimozione stopword, lemmatizzazione (spaCy).
-   - **Preprocessing leggero** (per gli embedding contestuali): solo rimozione newline e pulizia degli spazi — niente lowercasing, rimozione stopword o lemmatizzazione, per preservare l'informazione semantica/contestuale su cui si basano i modelli linguistici pre-addestrati.
+   - **Preprocessing leggero** (per gli embedding contestuali): solo rimozione newline e pulizia degli spazi, niente lowercasing, rimozione stopword o lemmatizzazione, per preservare l'informazione semantica/contestuale su cui si basano i modelli linguistici pre-addestrati.
 3. **Rappresentazione del testo**:
-   - **TF-IDF** — rappresentazione sparsa, shape `(2232, 6985)`, calcolata sia sullo split train/test (classificazione) sia sull'intero corpus (clustering).
-   - **Sentence embedding** — rappresentazione densa da `all-MiniLM-L6-v2` (Sentence Transformers), shape `(2232, 384)`.
-4. **Classificazione** — Logistic Regression, SVM (kernel RBF) e Random Forest, ciascuno addestrato sia su TF-IDF che su embedding.
-5. **Clustering** — KMeans e Agglomerative Clustering su entrambe le rappresentazioni, con il numero di cluster selezionato tramite analisi della silhouette (k = 2…20).
+   - **TF-IDF**: rappresentazione sparsa, shape `(2232, 6985)`, calcolata sia sullo split train/test (classificazione) sia sull'intero corpus (clustering).
+   - **Sentence embedding**: rappresentazione densa da `all-MiniLM-L6-v2` (Sentence Transformers), shape `(2232, 384)`.
+4. **Classificazione**: Logistic Regression, SVM (kernel RBF) e Random Forest, ciascuno addestrato sia su TF-IDF che su embedding.
+5. **Clustering**: KMeans e Agglomerative Clustering su entrambe le rappresentazioni, con il numero di cluster selezionato tramite analisi della silhouette (k = 2…20).
 
 ## Notebook
 
